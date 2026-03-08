@@ -23,6 +23,7 @@ type DirectRouteCase = {
   expectedTaskType: TaskType
   expectedTargetType: string
   expectedProjectId: string
+  expectedPayloadSubset?: Record<string, unknown>
 }
 
 const authState = vi.hoisted<AuthState>(() => ({
@@ -315,6 +316,11 @@ const DIRECT_CASES: ReadonlyArray<DirectRouteCase> = [
     expectedTaskType: TASK_TYPE.INSERT_PANEL,
     expectedTargetType: 'NovelPromotionStoryboard',
     expectedProjectId: 'project-1',
+    expectedPayloadSubset: {
+      storyboardId: 'storyboard-1',
+      insertAfterPanelId: 'panel-ins',
+      userInput: '请根据前后镜头自动分析并插入一个自然衔接的新分镜。',
+    },
   },
   {
     routeFile: 'src/app/api/novel-promotion/[projectId]/lip-sync/route.ts',
@@ -471,6 +477,9 @@ describe('api contract - direct submit routes (behavior)', () => {
       expect(submitArg?.targetType).toBe(routeCase.expectedTargetType)
       expect(submitArg?.projectId).toBe(routeCase.expectedProjectId)
       expect(submitArg?.userId).toBe('user-1')
+      if (routeCase.expectedPayloadSubset) {
+        expect(submitArg?.payload).toEqual(expect.objectContaining(routeCase.expectedPayloadSubset))
+      }
 
       const json = await res.json() as Record<string, unknown>
       const isVoiceGenerateRoute = routeCase.routeFile.endsWith('/voice-generate/route.ts')

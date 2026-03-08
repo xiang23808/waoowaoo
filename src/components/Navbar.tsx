@@ -15,7 +15,7 @@ export default function Navbar() {
   const { data: session, status } = useSession()
   const t = useTranslations('nav')
   const tc = useTranslations('common')
-  const { currentVersion, update, shouldPulse, showModal, isChecking, openModal, dismissCurrentUpdate, checkNow } = useGithubReleaseUpdate()
+  const { currentVersion, update, shouldPulse, showModal, openModal, dismissCurrentUpdate, checkNow } = useGithubReleaseUpdate()
   const [checkMsg, setCheckMsg] = useState<string | null>(null)
   const [checkMsgFading, setCheckMsgFading] = useState(false)
   const [manualChecking, setManualChecking] = useState(false)
@@ -101,15 +101,6 @@ export default function Navbar() {
                 </div>
               ) : session ? (
                 <>
-                  <a
-                    href="https://www.waoowaoo.com/community.html"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs sm:text-sm text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] font-medium transition-colors flex items-center gap-1"
-                  >
-                    <AppIcon name="usersRound" className="w-4 h-4" />
-                    {t('feedback')}
-                  </a>
                   <Link
                     href={{ pathname: '/workspace' }}
                     className="text-sm text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] font-medium transition-colors flex items-center gap-1"
@@ -133,6 +124,15 @@ export default function Navbar() {
                     {t('profile')}
                   </Link>
                   <LanguageSwitcher />
+                  <a
+                    href="/api/admin/download-logs"
+                    download
+                    className="text-sm text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] font-medium transition-colors flex items-center gap-1"
+                    title={t('downloadLogs')}
+                  >
+                    <AppIcon name="download" className="w-4 h-4" />
+                    {t('downloadLogs')}
+                  </a>
                 </>
 
               ) : (
